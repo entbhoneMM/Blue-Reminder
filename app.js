@@ -15,8 +15,8 @@ userInputTag.addEventListener('change', (event) => {
 
   // Object Constructer
   function MyObject(param1 = 'default1', param2 = 'default2') {
-    this.property1 = param1;
-    this.property2 = param2;
+    this.taskName = param1
+    this.taskId = param2
   }
 
   taskObj = new MyObject(inputValue, taskId);
@@ -99,7 +99,7 @@ function applyTaskListFn(userInput, id) {
       const dataFromLocalStorage = localStorage.getItem('previousData')
       const arrayConvertedJson = JSON.parse(dataFromLocalStorage)
       const filteredArray = arrayConvertedJson.filter( obj => {
-        return obj.property2 != targetTag
+        return obj.taskId != targetTag
       })
 
       localStorage.setItem('previousData', JSON.stringify(filteredArray))
