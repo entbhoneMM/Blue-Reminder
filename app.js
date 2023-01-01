@@ -5,6 +5,47 @@ let taskId = 0,
   jsonConvertedArray,
   jsonConvertTaskObj
 
+
+
+window.addEventListener('load', () => {
+
+  if (localStorage.hasOwnProperty('previousData')) {
+    const dataFromLocalStorage = localStorage.getItem('previousData')
+    const arrayConvertedJson = JSON.parse(dataFromLocalStorage)
+
+    arrayConvertedJson.forEach(task => {
+      const taskTag = `
+          <div
+            class="listTag list-group-item d-flex justify-content-between align-items-center"
+            id="${task.taskId}"
+          >
+            <div class="d-flex justify-content-between align-items-center">
+              <input type="radio" class="delTag form-check-input mt-0 me-3" id="task" />
+              <label class="fw-bold form-check-label textWarp" for="task">
+                ${task.taskName}
+              </label>
+            </div>
+            <span class="badge bg-danger rounded-pill">today</span>
+          </div>`
+
+          document.querySelector('.listContainer').innerHTML += taskTag
+
+
+          
+          
+
+    });
+
+  }
+
+
+})
+
+
+
+
+
+
 userInputTag.addEventListener('change', (event) => {
 
 
@@ -20,7 +61,6 @@ userInputTag.addEventListener('change', (event) => {
   }
 
   taskObj = new MyObject(inputValue, taskId);
-  // jsonConvertTaskObj = JSON.stringify(taskObj)
   
   containerArray.push(taskObj)
 
@@ -90,16 +130,25 @@ function applyTaskListFn(userInput, id) {
 
   document.querySelector('.listContainer').append(listTag)
 
-  radioInput.addEventListener('click', (event) => {
-    const targetTag = event.target.parentNode.parentNode.id
-    event.target.parentNode.parentNode.style.opacity = 0
-    setTimeout(() => {
-      event.target.parentNode.parentNode.remove()
+  radioInput.addEventListener('click', removeTaskFn)
+}
 
-      const dataFromLocalStorage = localStorage.getItem('previousData')
+function removeTaskFn (event) {
+  const targetTag = event.target.parentNode.parentNode.id
+  event.target.parentNode.parentNode.style.opacity = 0
+  setTimeout(() => {
+    event.target.parentNode.parentNode.remove()
+    localStorageDataRemoveFn(targetTag)
+    
+  }, 500)
+}
+
+
+function localStorageDataRemoveFn (IdPara) {
+  const dataFromLocalStorage = localStorage.getItem('previousData')
       const arrayConvertedJson = JSON.parse(dataFromLocalStorage)
       const filteredArray = arrayConvertedJson.filter( obj => {
-        return obj.taskId != targetTag
+        return obj.taskId != IdPara
       })
 
       localStorage.setItem('previousData', JSON.stringify(filteredArray))
@@ -109,10 +158,4 @@ function applyTaskListFn(userInput, id) {
         localStorage.removeItem('previousData')
 
       }
-
-    }, 500)
-  })
 }
-
-
-
