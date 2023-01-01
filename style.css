@@ -77,6 +77,7 @@ input.userInputTag:focus {
 
 input[type~='radio']{
     min-width: 20px;
+    min-height: 20px;
 }
 
 label[class~='textWarp'] {
