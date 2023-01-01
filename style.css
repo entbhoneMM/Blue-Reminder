@@ -75,10 +75,10 @@ input.userInputTag:focus {
     box-shadow: none;
 }
 
-/* input[type~='radio']{
+input[type~='radio']{
     min-width: 20px;
     min-height: 20px;
-} */
+}
 
 label[class~='textWarp'] {
     overflow-wrap: break-word;
