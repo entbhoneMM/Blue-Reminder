@@ -7,11 +7,11 @@ let taskId = 0,
   arrayConvertedJson
 
 
-
 window.addEventListener('load', () => {
   createTaskFn()
   const finalTaskID = arrayConvertedJson[arrayConvertedJson.length-1].taskId
   taskId = finalTaskID + 1
+
 } )
 
 
@@ -46,6 +46,15 @@ userInputTag.addEventListener('change', (event) => {
   taskId++
   event.target.value = ''
 })
+
+
+
+
+
+
+
+
+
 
 
 
