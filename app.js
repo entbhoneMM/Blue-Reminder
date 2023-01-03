@@ -1,22 +1,23 @@
 const userInputTag = document.querySelector('#userInputTag')
 let taskId = 0,
   containerArray = [],
+  noTaskArray = [{ taskName: 'Nothing To Do...!', taskId: 'ntd' }],
   taskObj,
   jsonConvertedArray,
   dataFromLocalStorage,
   arrayConvertedJson
 
-
 window.addEventListener('load', () => {
-  createTaskFn()
-  const finalTaskID = arrayConvertedJson[arrayConvertedJson.length-1].taskId
-  taskId = finalTaskID + 1
-
-} )
-
+  try {
+    createTaskFn()
+    const finalTaskID = arrayConvertedJson[arrayConvertedJson.length - 1].taskId
+    taskId = finalTaskID + 1
+  } catch {
+    document.getElementById('ntd').remove()
+  }
+})
 
 userInputTag.addEventListener('change', (event) => {
-
   containerArray = []
 
   const inputValue = event.target.value
@@ -27,11 +28,10 @@ userInputTag.addEventListener('change', (event) => {
     this.taskId = taskId
   }
 
-  taskObj = new MyObject(inputValue, taskId);
-  
+  taskObj = new MyObject(inputValue, taskId)
+
   containerArray.push(taskObj)
 
-  
   if (localStorage.hasOwnProperty('previousData')) {
     dataFromLocalStorage = localStorage.getItem('previousData')
     arrayConvertedJson = JSON.parse(dataFromLocalStorage)
@@ -47,71 +47,43 @@ userInputTag.addEventListener('change', (event) => {
   event.target.value = ''
 })
 
-
-
-
-
-
-
-
-
-
-
-
-function createTaskFn () {
-
+function createTaskFn() {
   if (localStorage.hasOwnProperty('previousData')) {
-
     document.querySelector('.listContainer').innerHTML = ''
-
     dataFromLocalStorage = localStorage.getItem('previousData')
     arrayConvertedJson = JSON.parse(dataFromLocalStorage)
-    arrayConvertedJson.forEach((ele) => {
-
-      applyTaskListFn(ele.taskName, ele.taskId)
-      // document.querySelector('.listContainer').innerHTML += taskTag
-
-    });
-
-  }
-
+    arrayConvertedJson.forEach((ele) =>
+      applyTaskListFn(ele.taskName, ele.taskId),
+    )
+  } else noTaskArray.forEach((ele) => applyTaskListFn(ele.taskName, ele.taskId))
 }
 
-
-
-function removeTaskFn (event) {
-
+function removeTaskFn(event) {
   const targetTag = event.target.parentNode.parentNode.id
+  if (targetTag === 'ntd') {
+    return
+  }
   event.target.parentNode.parentNode.style.opacity = 0
   setTimeout(() => {
-  event.target.parentNode.parentNode.remove()
-  localStorageDataRemoveFn(targetTag)
-  
+    event.target.parentNode.parentNode.remove()
+    localStorageDataRemoveFn(targetTag)
   }, 500)
-
 }
 
-
-
-function localStorageDataRemoveFn (IdPara) {
+function localStorageDataRemoveFn(IdPara) {
   const dataFromLocalStorage = localStorage.getItem('previousData')
-      const arrayConvertedJson = JSON.parse(dataFromLocalStorage)
-      const filteredArray = arrayConvertedJson.filter( obj => {
-        return obj.taskId != IdPara
-      })
+  const arrayConvertedJson = JSON.parse(dataFromLocalStorage)
+  const filteredArray = arrayConvertedJson.filter((obj) => {
+    return obj.taskId != IdPara
+  })
 
-      localStorage.setItem('previousData', JSON.stringify(filteredArray))
+  localStorage.setItem('previousData', JSON.stringify(filteredArray))
 
-      if (filteredArray.length === 0) {
-     
-        localStorage.removeItem('previousData')
-
-      }
+  if (filteredArray.length === 0) {
+    localStorage.removeItem('previousData')
+    createTaskFn()
+  }
 }
-
-
-
-
 
 function applyTaskListFn(userInput, id) {
   const listTag = document.createElement('div')
@@ -121,7 +93,7 @@ function applyTaskListFn(userInput, id) {
     'd-flex',
     'justify-content-between',
     'align-items-center',
-    'hideTag'
+    'hideTag',
   )
   listTag.id = id
   setTimeout(() => {
@@ -155,5 +127,4 @@ function applyTaskListFn(userInput, id) {
   radioInput.addEventListener('click', (event) => {
     removeTaskFn(event)
   })
-
 }
