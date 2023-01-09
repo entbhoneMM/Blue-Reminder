@@ -3,6 +3,7 @@ Body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 
@@ -17,7 +18,7 @@ div.container {
 }
 
 .listContainer {
-    border-radius: 5px;
+    border-radius: 10px;
     user-select: none;
     cursor: pointer;
     transition: all 1.5s ease-in;
@@ -25,23 +26,29 @@ div.container {
 }
 
 .listTag {
-    transition: all .5s ease-in;
+    opacity: 0;
+    transition: all 0.3s ease-in;
 }
 
 div.containerOfUserInput {
     position: fixed;
     bottom: 20px;
     z-index: 3;
+    color: brown;
+    cursor: pointer;
+    user-select: none;
 }
 
-div.userInputTag {
-    border: 1px solid #0d6efd;
-
+.fa-solid {
+    font-size: 30px;
 }
 
-.userInput {
-    width: 800px;
+div.containerOfUserInput:hover {
+    color: var(--bs-danger);
 }
+
+
+
 
 div.bottomColorTag {
     background-color: #071E22;
@@ -61,19 +68,18 @@ div.bottomBlur {
 }
 
 
-
-
-
-
-input.userInputTag {
+input.userInputTag, textarea.userInputTag {
     border-style: none;
     border-radius: 0;
-    border-bottom: 1px solid #071E22;
 }
 
-input.userInputTag:focus {
+input.userInputTag:focus, textarea.userInputTag:focus {
     box-shadow: none;
+    background-color: #242526;
+    color: #d5d5d5;
 }
+
+
 
 input[type~='radio']{
     min-width: 20px;
@@ -89,7 +95,75 @@ label[class~='textWarp'] {
     opacity: 0.1;
 }
 
+form {
+    border-radius: 5px;
+    padding: 5px;
+    width: 50%;
+}
+
+div.inputGp {
+    margin-bottom: 10px;
+    border-radius: 10px;   
+    border: 2px solid #242526;
+    overflow: hidden; 
+    padding: 10px;
+    background-color: #1c1e21;
+    box-shadow: 0 0 15px rgba(0,0,0,1);
+
+}
+
+input:focus {
+    background-color: #071E22;
+}
 
 
 
+div.inputGp > * {
+    background-color: #1c1e21;
+    color: #d5d5d5;
+}
 
+
+
+.inputLayer {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(7px);
+    opacity: 0;
+    z-index: 4;
+    transition: opactiy 1s ease-in;
+}
+
+.showInputLayer {
+    display: flex;
+    opacity: 1;
+}
+
+
+input.taskName {
+    border-bottom: 1px solid var(--bs-secondary);
+    border-radius:  10px 10px 0px 0px;
+}
+
+textarea.textDescription {
+    border-radius:  0px 0px 10px 10px;
+    resize: none;
+}
+
+input.dateTime {
+    max-width: fit-content;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+
+
+@media (min-width:992px) {
+    form.cusForm {
+        width: 50%;
+    }
+}

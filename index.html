@@ -21,6 +21,9 @@
       referrerpolicy="no-referrer"
     />
 
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -31,7 +34,7 @@
      
       <div class="listContainer list-group list-group-flush">
         <div
-          class="listTag list-group-item d-flex justify-content-between align-items-center"
+          class="list-group-item d-flex justify-content-between align-items-center"
         >
           <div class="d-flex justify-content-between align-items-center">
             <input type="radio" class="form-check-input mt-0 me-3" id="task" />
@@ -49,27 +52,31 @@
     <!-- this tag is just for background color -->
     <div class="bottomColorTag"></div>
 
-    <div class="container containerOfUserInput">
-      <div class="userInputGp listContainer list-group list-group-flush mt-2">
-        <div
-          class="listTag list-group-item d-flex justify-content-between align-items-center"
-        >
-          <div
-            class="userInput d-flex justify-content-between align-items-center"
-          >
-            <i class="fa-solid fa-circle-plus me-3 text-primary"></i>
-            <input
-              type="text"
-              id="userInputTag"
-              class="form-control h-25 d-block userInputTag"
-            />
-          </div>
-          <span class="badge bg-primary rounded-pill ms-3">any deadline ?</span>
-        </div>
-      </div>
+    <div class="container containerOfUserInput d-flex align-items-center">
+      <i class="fa-solid fa-circle-plus me-3 text-primary"></i>
+      <span class="fw-bold">Add new task</span>
     </div>
 
     <div class="bottomBlur"></div>
+
+    <div class="inputLayer justify-content-center align-items-center">
+        <form action="" class="d-flex justify-content-center flex-column container cusForm">
+          <div class="inputGp">
+            <input type="text" class="form-control userInputTag taskName" placeholder="Task Name">
+            <textarea class="form-control userInputTag mb-2 textDescription" name="textDescription" rows="5" placeholder="Description"></textarea>
+            <input type="datetime-local" class="userInputTag" id="flat">
+          </div>
+
+          <div class="btnGp d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-danger btn-sm me-2" id="cancelTag">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm disabled" id="addTaskBtn">Add task</button>
+          </div>
+
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+ 
     <script src="app.js"></script>
   </body>
 </html>

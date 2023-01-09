@@ -1,11 +1,19 @@
-const userInputTag = document.querySelector('#userInputTag')
+const addTaskBtn = document.querySelector('#addTaskBtn')
+const containerOfUserInput = document.querySelector('.containerOfUserInput')
+const userInputLayer = document.querySelector('.inputLayer')
+const cancelTag = document.querySelector('#cancelTag')
+const taskNameInputTag = document.querySelector('.taskName')
+
+
 let taskId = 0,
   containerArray = [],
-  noTaskArray = [{ taskName: 'Nothing To Do...!', taskId: 'ntd' }],
+  noTaskArray = [{ taskName: 'Nothing To Do...!', taskId: 'ntd', description: 'this is something Desc' }],
   taskObj,
   jsonConvertedArray,
   dataFromLocalStorage,
   arrayConvertedJson
+
+
 
 window.addEventListener('load', () => {
   try {
@@ -17,18 +25,41 @@ window.addEventListener('load', () => {
   }
 })
 
-userInputTag.addEventListener('change', (event) => {
+
+containerOfUserInput.addEventListener('click', () => {
+  userInputLayer.classList.add('showInputLayer')
+  taskNameInputTag.addEventListener('keyup', () => {
+    if (taskNameInputTag.value != '') addTaskBtn.classList.remove('disabled')
+    else addTaskBtn.classList.add('disabled')
+  })
+  
+})
+
+cancelTag.addEventListener('click', () => {
+ userInputLayer.classList.remove('showInputLayer')
+})
+
+
+addTaskBtn.addEventListener('click', () => {
   containerArray = []
 
-  const inputValue = event.target.value
+  const inputValue = taskNameInputTag.value
+  const description = document.querySelector('.textDescription').value
+  const dateTime = document.getElementById('flat').value
+  
+  const dateObj = new Date(dateTime)
 
-  // Object Constructer
-  function MyObject(taskName, taskId) {
+  
+  function MyObject(taskName, taskId, description, dateObj) {
     this.taskName = taskName
     this.taskId = taskId
-  }
+    this.description = description
+    this.dateObj = dateObj
+  
 
-  taskObj = new MyObject(inputValue, taskId)
+   }
+
+  taskObj = new MyObject(inputValue, taskId, description, dateObj)
 
   containerArray.push(taskObj)
 
@@ -44,7 +75,9 @@ userInputTag.addEventListener('change', (event) => {
   createTaskFn()
 
   taskId++
-  event.target.value = ''
+  setTimeout(() => {
+    userInputLayer.classList.remove('showInputLayer')
+  }, 500);
 })
 
 function createTaskFn() {
@@ -53,9 +86,9 @@ function createTaskFn() {
     dataFromLocalStorage = localStorage.getItem('previousData')
     arrayConvertedJson = JSON.parse(dataFromLocalStorage)
     arrayConvertedJson.forEach((ele) =>
-      applyTaskListFn(ele.taskName, ele.taskId),
+      applyTaskListFn(ele.taskName, ele.taskId, ele.description),
     )
-  } else noTaskArray.forEach((ele) => applyTaskListFn(ele.taskName, ele.taskId))
+  } else noTaskArray.forEach((ele) => applyTaskListFn(ele.taskName, ele.taskId, ele.description))
 }
 
 function removeTaskFn(event) {
@@ -85,7 +118,7 @@ function localStorageDataRemoveFn(IdPara) {
   }
 }
 
-function applyTaskListFn(userInput, id) {
+function applyTaskListFn(userInput, id, desc) {
   const listTag = document.createElement('div')
   listTag.classList.add(
     'listTag',
@@ -93,29 +126,35 @@ function applyTaskListFn(userInput, id) {
     'd-flex',
     'justify-content-between',
     'align-items-center',
-    'hideTag',
+    'hideTag'
   )
   listTag.id = id
-  setTimeout(() => {
-    listTag.style.opacity = 1
-  }, 100)
-
+ 
   const innerTaskWarpper = document.createElement('div')
   innerTaskWarpper.classList.add(
     'd-flex',
-    'justify-content-between',
-    'align-items-center',
+    'justify-content-between'
   )
 
   const radioInput = document.createElement('input')
-  radioInput.classList.add('form-check-input', 'mt-0', 'me-3')
+  radioInput.classList.add('form-check-input', 'mt-1', 'me-1')
   radioInput.type = 'radio'
+
+  const taskInfoDiv = document.createElement('div')
+  taskInfoDiv.classList.add('ms-2', 'me-auto')
 
   const taskLabel = document.createElement('label')
   taskLabel.classList.add('fw-bold', 'form-check-label', 'textWarp')
+  taskLabel.setAttribute('for', id)
   taskLabel.textContent = userInput
 
-  innerTaskWarpper.append(radioInput, taskLabel)
+  const taskDesc = document.createElement('p')
+  taskDesc.classList.add('mb-0')
+  taskDesc.textContent = desc
+
+  taskInfoDiv.append(taskLabel, taskDesc)
+
+  innerTaskWarpper.append(radioInput, taskInfoDiv)
 
   const deadlinSpan = document.createElement('span')
   deadlinSpan.classList.add('badge', 'bg-danger', 'rounded-pill')
@@ -125,6 +164,23 @@ function applyTaskListFn(userInput, id) {
   document.querySelector('.listContainer').append(listTag)
 
   radioInput.addEventListener('click', (event) => {
-    removeTaskFn(event)
+    setTimeout(() => {
+      removeTaskFn(event)
+    }, 2000)
   })
+  
+  setTimeout(() => {
+    listTag.style.opacity = 1
+  }, 100)
+
 }
+
+flatpickr('#flat', {
+  disableMobile: "true",
+  enableTime: true,
+  altInput: true,
+  minDate: "today",
+  altFormat: 'j M, Y h:i K ',
+  dateFormat: 'Z',
+  defaultDate: new Date()
+})
